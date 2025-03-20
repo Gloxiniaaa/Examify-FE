@@ -1,0 +1,17 @@
+.coin-animation {
+  position: relative;
+  display: inline-block;
+  animation: coin-flip 2s infinite;
+}
+
+@keyframes coin-flip {
+  0% {
+    transform: rotateY(0deg);
+  }
+  50% {
+    transform: rotateY(180deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
