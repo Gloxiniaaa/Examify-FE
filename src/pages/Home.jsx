@@ -1,4 +1,5 @@
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -6,12 +7,16 @@ const Home = () => {
       {/* Navbar */}
       <nav className="bg-white shadow-md p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-primary">Examify</h1>
+          <Link to="/" className="text-2xl font-bold text-primary">
+            Examify
+          </Link>
           <div className="space-x-4">
-            <button className="text-neutral-600 hover:text-primary">Login</button>
-            <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary">
+            <Link to="/login" className="text-neutral-600 hover:text-primary">
+              Login
+            </Link>
+            <Link to="/signup" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary">
               Sign Up
-            </button>
+            </Link>
           </div>
         </div>
       </nav>
@@ -22,8 +27,8 @@ const Home = () => {
           Create and Take Exams Online with Ease
         </h2>
         <p className="text-lg text-neutral-600 mb-8 max-w-2xl mx-auto">
-          Empowering teachers to create assessments and students to test their knowledge
-          through a simple, secure platform.
+          Empowering teachers to create assessments and students to test their
+          knowledge through a simple, secure platform.
         </p>
         <div className="space-x-4">
           <button className="bg-primary text-white px-6 py-3 rounded-md hover:bg-secondary transition">
