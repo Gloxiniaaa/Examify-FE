@@ -44,7 +44,15 @@ function Login() {
         
         localStorage.setItem('token', data.data);
         localStorage.setItem('userRole', role);
-        navigate('/account');
+  
+        // Điều hướng dựa trên vai trò
+        if (role === "TEACHER") {
+          navigate('/teacher');
+        } else if (role === "STUDENT") {
+          navigate('/student');
+        } else {
+          navigate('/account'); // Mặc định nếu không xác định được role
+        }
       } else if (data.status === "ERROR") {
         toast.error("Login failed. Please check your credentials.");
       }
