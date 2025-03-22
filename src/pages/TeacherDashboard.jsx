@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Footer from "../components/Footer";
 import { useNavigate } from 'react-router-dom';
-
+import Navbar from "../components/NavBar";
 const TeacherDashboard = () => {
   const navigate = useNavigate();
   const [tests, setTests] = useState([
@@ -57,14 +57,8 @@ const TeacherDashboard = () => {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Navbar */}
-      <nav className="bg-white shadow-md p-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-primary">Examify - Teacher</h1>
-          <button className="text-neutral-600 hover:text-primary">
-            Logout
-          </button>
-        </div>
-      </nav>
+      <Navbar/>
+
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
