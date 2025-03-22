@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Singup";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import CreateTest from "./pages/CreateTest";
-
+import ViewResults from "./pages/ViewResults";
 function App() {
   return (
     <Router>
@@ -15,7 +15,8 @@ function App() {
         <Route path="/signup" element ={<Signup></Signup>} ></Route>
         <Route path="/student" element={<StudentDashboard></StudentDashboard>} />
         <Route path="/teacher" element ={<TeacherDashboard></TeacherDashboard>} ></Route>
-        <Route path="/teacher/createtest" element ={<CreateTest></CreateTest>} ></Route>
+        <Route path="/create" element ={<CreateTest></CreateTest>} ></Route>
+        <Route path="/teacher/results/:testId/:title" element ={<ViewResults></ViewResults>} ></Route>
       </Routes>
     </Router>
   );
