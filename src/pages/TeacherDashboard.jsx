@@ -1,8 +1,10 @@
 // TeacherDashboard.jsx
 import { useState } from "react";
 import Footer from "../components/Footer";
+import { useNavigate } from 'react-router-dom';
 
 const TeacherDashboard = () => {
+  const navigate = useNavigate();
   const [tests, setTests] = useState([
     {
       id: 1,
@@ -22,10 +24,10 @@ const TeacherDashboard = () => {
 
   const [newTest, setNewTest] = useState({ title: "", passcode: "" });
 
-  const handleLogout = () => {
-    // Add your logout logic here
-    console.log("Logging out...");
-  };
+  // const handleLogout = () => {
+  //   // Add your logout logic here
+  //   console.log("Logging out...");
+  // };
 
   const handleCreateTest = (e) => {
     e.preventDefault();
@@ -43,12 +45,13 @@ const TeacherDashboard = () => {
     setTests([...tests, test]);
     setNewTest({ title: "", passcode: "" });
     // In a real app, this would be an API call
+    navigate('/create');
     console.log("Created new test:", test);
   };
 
-  const handleViewResults = (testId) => {
-    // Placeholder for viewing results - would navigate to a results page
-    console.log(`Viewing results for test ${testId}`);
+  const handleViewResults = (testId, title) => {
+    navigate(`/teacher/results/${testId}/${encodeURIComponent(title)}`); 
+    console.log(`Viewing results for test ${testId}: ${title}`);
   };
 
   return (
@@ -56,7 +59,7 @@ const TeacherDashboard = () => {
       {/* Navbar */}
       <nav className="bg-white shadow-md p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-primary">Examify - Student</h1>
+          <h1 className="text-2xl font-bold text-primary">Examify - Teacher</h1>
           <button className="text-neutral-600 hover:text-primary">
             Logout
           </button>
@@ -73,18 +76,6 @@ const TeacherDashboard = () => {
           <p className="text-neutral-600">
             Manage your tests and view student results
           </p>
-        </section>
-
-        <section className="mb-12">
-          <h3 className="text-2xl font-semibold text-neutral-800 mb-6">
-            Create New Test
-          </h3>
-          <button
-            onClick={handleCreateTest}
-            className="bg-primary text-white px-6 py-2 rounded-md hover:bg-secondary transition"
-          >
-            Create Test
-          </button>
         </section>
 
         {/* Create New Test */}
@@ -175,7 +166,7 @@ const TeacherDashboard = () => {
                     </td>
                     <td className="p-4">
                       <button
-                        onClick={() => handleViewResults(test.id)}
+                        onClick={() => handleViewResults(test.id, test.title)}
                         className="text-primary hover:underline"
                       >
                         View Results
