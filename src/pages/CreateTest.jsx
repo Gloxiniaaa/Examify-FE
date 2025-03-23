@@ -1,20 +1,25 @@
 // CreateTest.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
 import Navbar from "../components/NavBar";
+import Footer from "../components/Footer";
+import { createTest } from "../store/TestSlice";
+import { toast } from "react-toastify";
 
 const CreateTest = () => {
   const navigate = useNavigate();
-  const [testDetails, setTestDetails] = useState({
+
+  // Single state object for all test data
+  const [testData, setTestData] = useState({
     title: "",
     description: "",
-    testTime: "", // in minutes
+    testTime: "",
     startTime: "",
     closeTime: "",
+    questions: [],
   });
 
-  const [questions, setQuestions] = useState([]);
+  // State for the current question being added
   const [newQuestion, setNewQuestion] = useState({
     text: "",
     options: [
@@ -23,24 +28,31 @@ const CreateTest = () => {
     ],
   });
 
-  const handleTestDetailsChange = (e) => {
-    const { name, value } = e.target;
-    setTestDetails((prev) => ({ ...prev, [name]: value }));
+  const handleLogout = () => {
+    console.log("Logging out...");
   };
 
+  // Handle changes to test details
+  const handleTestDetailsChange = (e) => {
+    const { name, value } = e.target;
+    setTestData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle changes to new question text
   const handleQuestionTextChange = (e) => {
     setNewQuestion((prev) => ({ ...prev, text: e.target.value }));
   };
 
+  // Handle changes to options (text or isCorrect)
   const handleOptionChange = (index, field, value) => {
     const updatedOptions = [...newQuestion.options];
     updatedOptions[index][field] = value;
     setNewQuestion((prev) => ({ ...prev, options: updatedOptions }));
   };
 
+  // Add a new option to the current question
   const addOption = () => {
-    if (newQuestion.options.length < 5) {
-      // Limit to 5 options for simplicity
+    if (newQuestion.options.length < 4) {
       setNewQuestion((prev) => ({
         ...prev,
         options: [...prev.options, { text: "", isCorrect: false }],
@@ -48,14 +60,15 @@ const CreateTest = () => {
     }
   };
 
+  // Remove an option from the current question
   const removeOption = (index) => {
-    if (newQuestion.options.length > 1) {
-      // Minimum 2 options
+    if (newQuestion.options.length > 2) {
       const updatedOptions = newQuestion.options.filter((_, i) => i !== index);
       setNewQuestion((prev) => ({ ...prev, options: updatedOptions }));
     }
   };
 
+  // Add the current question to the testData.questions array
   const addQuestion = () => {
     if (!newQuestion.text || newQuestion.options.some((opt) => !opt.text)) {
       alert("Please fill in the question and all options");
@@ -65,42 +78,69 @@ const CreateTest = () => {
       alert("Please mark at least one option as correct");
       return;
     }
-    setQuestions([...questions, newQuestion]);
+    setTestData((prev) => ({
+      ...prev,
+      questions: [...prev.questions, newQuestion],
+    }));
     setNewQuestion({
       text: "",
       options: [
-        { text: "", isCorrect: false },
-        { text: "", isCorrect: false },
         { text: "", isCorrect: false },
         { text: "", isCorrect: false },
       ],
     });
   };
 
+  // Remove a question from testData.questions
   const removeQuestion = (index) => {
-    const updatedQuestions = questions.filter((_, i) => i !== index);
-    setQuestions(updatedQuestions);
+    const updatedQuestions = testData.questions.filter((_, i) => i !== index);
+    setTestData((prev) => ({ ...prev, questions: updatedQuestions }));
   };
 
-  const handleSubmit = (e) => {
+  // Submit the entire testData to the API
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (
-      !testDetails.title ||
-      !testDetails.testTime ||
-      !testDetails.startTime ||
-      !testDetails.closeTime
+      !testData.title ||
+      !testData.testTime ||
+      !testData.startTime ||
+      !testData.closeTime
     ) {
       alert("Please fill in all test details");
       return;
     }
-    if (questions.length === 0) {
+    if (testData.questions.length === 0) {
       alert("Please add at least one question");
       return;
     }
-    const testData = { ...testDetails, questions };
-    console.log("Test Created:", testData);
-    // In a real app, send testData to your API
-    navigate("/teacher/dashboard");
+
+    // Format the testData to match the API structure
+    const formattedTestData = {
+      title: testData.title,
+      description: testData.description,
+      testTime: parseInt(testData.testTime, 10),
+      timeOpen: new Date(testData.startTime).toISOString(),
+      timeClose: new Date(testData.closeTime).toISOString(),
+      teacherId: 1, // Hardcoded; replace with auth data
+      numberOfQuestion: testData.questions.length,
+      questions: testData.questions.map((q) => ({
+        content: q.text,
+        score: 1.0, // Default score; add field if needed
+        answers: q.options.map((opt) => ({
+          content: opt.text,
+          isCorrect: opt.isCorrect,
+        })),
+      })),
+    };
+
+    try {
+      const result = await createTest(formattedTestData);
+      // console.log("Test created successfully:", result);
+      toast.success("Test created successfully");
+      navigate("/teacher");
+    } catch (error) {
+      alert("Failed to create test: " + error.message);
+    }
   };
 
   return (
@@ -128,7 +168,7 @@ const CreateTest = () => {
                 type="text"
                 id="title"
                 name="title"
-                value={testDetails.title}
+                value={testData.title}
                 onChange={handleTestDetailsChange}
                 className="w-full px-3 py-2 border border-neutral-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Enter test title"
@@ -146,7 +186,7 @@ const CreateTest = () => {
                 type="number"
                 id="testTime"
                 name="testTime"
-                value={testDetails.testTime}
+                value={testData.testTime}
                 onChange={handleTestDetailsChange}
                 className="w-full px-3 py-2 border border-neutral-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="e.g., 60"
@@ -165,7 +205,7 @@ const CreateTest = () => {
                 type="datetime-local"
                 id="startTime"
                 name="startTime"
-                value={testDetails.startTime}
+                value={testData.startTime}
                 onChange={handleTestDetailsChange}
                 className="w-full px-3 py-2 border border-neutral-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 required
@@ -182,7 +222,7 @@ const CreateTest = () => {
                 type="datetime-local"
                 id="closeTime"
                 name="closeTime"
-                value={testDetails.closeTime}
+                value={testData.closeTime}
                 onChange={handleTestDetailsChange}
                 className="w-full px-3 py-2 border border-neutral-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 required
@@ -199,7 +239,7 @@ const CreateTest = () => {
             <textarea
               id="description"
               name="description"
-              value={testDetails.description}
+              value={testData.description}
               onChange={handleTestDetailsChange}
               className="w-full px-3 py-2 border border-neutral-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Enter test description"
@@ -256,7 +296,7 @@ const CreateTest = () => {
                     />
                     Correct
                   </label>
-                  {newQuestion.options.length > 1 && (
+                  {newQuestion.options.length > 2 && (
                     <button
                       type="button"
                       onClick={() => removeOption(index)}
@@ -267,7 +307,7 @@ const CreateTest = () => {
                   )}
                 </div>
               ))}
-              {newQuestion.options.length < 5 && (
+              {newQuestion.options.length < 4 && (
                 <button
                   type="button"
                   onClick={addOption}
@@ -285,13 +325,14 @@ const CreateTest = () => {
               Add Question
             </button>
           </div>
-          {/* Display Added Questions with Remove Option */}
-          {questions.length > 0 && (
+
+          {/* Display Added Questions */}
+          {testData.questions.length > 0 && (
             <div className="mt-6">
               <h4 className="text-xl font-semibold text-neutral-800 mb-4">
                 Added Questions
               </h4>
-              {questions.map((q, index) => (
+              {testData.questions.map((q, index) => (
                 <div
                   key={index}
                   className="bg-accent p-4 rounded-md mb-4 flex justify-between items-start"
@@ -329,6 +370,7 @@ const CreateTest = () => {
         </section>
 
         <button
+          onClick={handleSubmit}
           type="submit"
           form="testForm"
           className="bg-primary text-white px-6 py-3 rounded-md hover:bg-secondary transition"
