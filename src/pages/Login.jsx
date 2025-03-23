@@ -44,6 +44,7 @@ function Login() {
         
         localStorage.setItem('token', data.data);
         localStorage.setItem('userRole', role);
+        localStorage.setItem('userId', decodedToken.userId);
   
         // Điều hướng dựa trên vai trò
         if (role === "TEACHER") {
