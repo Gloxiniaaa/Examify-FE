@@ -1,7 +1,7 @@
 // CreateTest.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/NavBar";
+import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { createTest } from "../store/teacherTestSlice";
 import { toast } from "react-toastify";
