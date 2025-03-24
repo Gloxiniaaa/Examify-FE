@@ -2,7 +2,10 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTeacherTests, selectTeacherTests } from "../store/teacherTestSlice";
+import {
+  fetchTeacherTests,
+  selectTeacherTests,
+} from "../store/teacherTestSlice";
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
 
@@ -12,23 +15,25 @@ const TeacherDashboard = () => {
   const { tests, loading, error } = useSelector(selectTeacherTests);
 
   useEffect(() => {
-    const teacherId = localStorage.getItem("userId"); 
+    const teacherId = localStorage.getItem("userId");
     dispatch(fetchTeacherTests(teacherId));
   }, [dispatch]);
 
   const handleCreateTest = () => {
-    navigate('/create');
+    navigate("/create");
   };
 
   const handleViewResults = (testId, title) => {
-    navigate(`/teacher/results/${testId}/${encodeURIComponent(title)}`); 
+    navigate(`/teacher/results/${testId}/${encodeURIComponent(title)}`);
+  };
+  const handleViewDetails = (testId) => {
+    navigate(`/teacher/testdetails/${testId}`);
   };
 
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Navbar */}
-      <Navbar/>
-
+      <Navbar />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
@@ -72,13 +77,10 @@ const TeacherDashboard = () => {
                     <th className="text-left p-4 text-neutral-800">Title</th>
                     <th className="text-left p-4 text-neutral-800">Passcode</th>
                     <th className="text-left p-4 text-neutral-800">Duration</th>
-                    <th className="text-left p-4 text-neutral-800">
-                      Time Open
-                    </th>
-                    <th className="text-left p-4 text-neutral-800">
-                      Time Close
-                    </th>
-                    <th className="text-left p-4 text-neutral-800">Actions</th>
+                    <th className="text-left p-4 text-neutral-800">Time Open</th>
+                    <th className="text-left p-4 text-neutral-800">Time Close</th>
+                    <th className="text-left p-4 text-neutral-800">Details</th>
+                    <th className="text-left p-4 text-neutral-800">Student</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -97,6 +99,14 @@ const TeacherDashboard = () => {
                       </td>
                       <td className="p-4 text-neutral-600">
                         {new Date(test.timeclose).toLocaleString()}
+                      </td>
+                      <td className="p-4">
+                        <button
+                          onClick={() => handleViewDetails(test.id)}
+                          className="text-primary hover:underline"
+                        >
+                          View Details
+                        </button>
                       </td>
                       <td className="p-4">
                         <button

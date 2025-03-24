@@ -10,6 +10,7 @@ import CreateTest from "./pages/CreateTest";
 import ViewResults from "./pages/ViewResults";
 import NotFoundPage from "./pages/404NotFoundPage";
 import React from "react";
+import TeacherTestDetails from "./pages/TeacherTestDetails";
 
 // Authentication utility
 const isTokenValid = () => {
@@ -66,6 +67,11 @@ function App() {
         <Route path="/teacher/results/:testId/:title" element={
           <ProtectedRoute requiredRole="TEACHER">
             <ViewResults />
+          </ProtectedRoute>
+        } />
+        <Route path="/teacher/testdetails/:testId" element={
+          <ProtectedRoute requiredRole="TEACHER">
+            <TeacherTestDetails></TeacherTestDetails>
           </ProtectedRoute>
         } />
 
