@@ -28,10 +28,6 @@ const CreateTest = () => {
     ],
   });
 
-  const handleLogout = () => {
-    console.log("Logging out...");
-  };
-
   // Handle changes to test details
   const handleTestDetailsChange = (e) => {
     const { name, value } = e.target;
@@ -121,7 +117,7 @@ const CreateTest = () => {
       testTime: parseInt(testData.testTime, 10),
       timeOpen: new Date(testData.startTime).toISOString(),
       timeClose: new Date(testData.closeTime).toISOString(),
-      teacherId: 1, // Hardcoded; replace with auth data
+      teacherId: localStorage.getItem("userId"),
       numberOfQuestion: testData.questions.length,
       questions: testData.questions.map((q) => ({
         content: q.text,
