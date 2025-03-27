@@ -6,7 +6,7 @@ import {
   fetchTeacherTests,
   selectTeacherTests,
 } from "../store/teacherTestSlice";
-import Navbar from "../components/Navbar";
+import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
 const TeacherDashboard = () => {
@@ -32,8 +32,8 @@ const TeacherDashboard = () => {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      {/* Navbar */}
-      <Navbar />
+      {/* NavBar */}
+      <NavBar />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">

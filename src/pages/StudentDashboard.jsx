@@ -1,7 +1,7 @@
 // StudentDashboard.jsx
 import { useState } from "react";
 import Footer from "../components/Footer";
-import Navbar from "../components/NavBar";
+import NavBar from "../components/NavBar";
 const StudentDashboard = () => {
   // Mock data - in a real app, this would come from an API
   const [availableTests] = useState([
@@ -34,8 +34,8 @@ const StudentDashboard = () => {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      {/* Navbar */}
-      <Navbar/>
+      {/* NavBar */}
+      <NavBar/>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
