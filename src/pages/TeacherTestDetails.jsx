@@ -6,7 +6,7 @@ import {
   updateTest,
   selectTeacherTests,
 } from "../store/teacherTestSlice";
-import Navbar from "../components/Navbar";
+import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
 const TestDetails = () => {
@@ -94,7 +94,7 @@ const TestDetails = () => {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <Navbar></Navbar>
+      <NavBar></NavBar>
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-neutral-800">Test Details</h2>
