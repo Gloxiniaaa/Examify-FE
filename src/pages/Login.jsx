@@ -24,7 +24,7 @@ function Login() {
     event.preventDefault();
     
     try {
-      const response = await fetch('http://localhost:8090/api/authenticate', {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/authenticate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ function Login() {
   const handleGoogleLogin = async () => {
     try {
       // Redirect to Google OAuth endpoint
-      window.location.href = 'http://localhost:8090/oauth2/authorization/google';
+      window.location.href = `${import.meta.env.VITE_REACT_APP_BE_API_URL}/oauth2/authorization/google`;
     } catch (error) {
       toast.error("An error occurred with Google sign-in.");
       console.error('Error:', error);

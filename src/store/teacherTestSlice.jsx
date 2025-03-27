@@ -83,7 +83,7 @@ export const updateTest = createAsyncThunk(
   'tests/updateTest',
   async ({ testId, testData }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:8090/tests/${testId}`, {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/tests/${testId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(testData),
