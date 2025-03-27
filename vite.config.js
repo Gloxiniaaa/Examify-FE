@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     allowedHosts: [
       'localhost',
-      'https://examify-online.azurewebsites.net' // Add this line to allow the specific host
+      'examify-online.azurewebsites.net' // Add this line to allow the specific host
     ],
     watch: {
       usePolling: true,
