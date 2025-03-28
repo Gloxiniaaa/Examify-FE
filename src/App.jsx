@@ -75,7 +75,7 @@ function App() {
             <CreateTest />
           </ProtectedRoute>
         } />
-        <Route path="/teacher/results/:testId/:title" element={
+        <Route path="/teacher/results/:testId" element={
           <ProtectedRoute requiredRole="TEACHER">
             <ViewResults />
           </ProtectedRoute>

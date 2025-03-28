@@ -23,8 +23,8 @@ const TeacherDashboard = () => {
     navigate("/create");
   };
 
-  const handleViewResults = (testId, title) => {
-    navigate(`/teacher/results/${testId}/${encodeURIComponent(title)}`);
+  const handleViewResults = (testId) => {
+    navigate(`/teacher/results/${testId}`);
   };
   const handleViewDetails = (testId) => {
     navigate(`/teacher/testdetails/${testId}`);

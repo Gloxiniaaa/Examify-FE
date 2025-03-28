@@ -49,7 +49,7 @@ export const fetchTeacherTests = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.data; // Return only the 'data' array from the response
+      return data.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -100,12 +100,44 @@ export const updateTest = createAsyncThunk(
   }
 );
 
+export const fetchTestResults = createAsyncThunk(
+  "tests/fetchTestResults",
+  async (testId, { rejectWithValue }) => {
+    try {
+      const apiUrl = `${
+        import.meta.env.VITE_REACT_APP_BE_API_URL
+      }/tests/${testId}/results`;
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch test results");
+      }
+
+      const data = await response.json();
+      if (data.status !== "OK") {
+        throw new Error(data.message || "Failed to fetch test results");
+      }
+
+      return data.data; // Return the data object
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // Create the slice
 const teacherTestSlice = createSlice({
   name: "tests",
   initialState: {
     tests: [],
     currentTest: null,
+    allTestResults: [],
     loading: false,
     error: null,
   },
@@ -147,6 +179,19 @@ const teacherTestSlice = createSlice({
         state.loading = false;
       })
       .addCase(updateTest.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Fetch test results
+      .addCase(fetchTestResults.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTestResults.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allTestResults = action.payload;
+      })
+      .addCase(fetchTestResults.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
