@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPastTestResults, selectStudentTests } from "../store/studentTestSlice"; // Adjust path as needed
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar";
 const StudentDashboard = () => {
   const [passcode, setPasscode] = useState("");
   const [error, setError] = useState("");
@@ -50,7 +50,7 @@ const StudentDashboard = () => {
   };
 
   const handleViewDetails = (testId) => {
-    navigate(`/results/${testId}`); // Navigate to result details page
+    navigate(`/tests/${testId}/students/${studentId}/results`);
   };
 
   return (
@@ -137,7 +137,7 @@ const StudentDashboard = () => {
                       </td>
                       <td className="p-4">
                         <button
-                          onClick={() => handleViewDetails(test.testid)}
+                          onClick={() => handleViewDetails(result.testid)}
                           className="text-primary hover:underline"
                         >
                           View Details

@@ -96,9 +96,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/tests/:testId/students/:studentId/results" element={
-          <ProtectedRoute requiredRole="TEACHER">
-            <ViewSubmission></ViewSubmission>
-          </ProtectedRoute>
+          <ViewSubmission></ViewSubmission>
         } />
 
         {/* 404 Page */}
