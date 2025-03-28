@@ -1,25 +1,11 @@
 import Footer from "../components/Footer";
-import { Link } from "react-router-dom";
+import NavBar from "../components/NavBar"; // Thêm NavBar
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-neutral-50">
-      {/* NavBar */}
-      <nav className="bg-white shadow-md p-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold text-primary">
-            Examify
-          </Link>
-          <div className="space-x-4">
-            <Link to="/login" className="text-neutral-600 hover:text-primary">
-              Login
-            </Link>
-            <Link to="/signup" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary">
-              Sign Up
-            </Link>
-          </div>
-        </div>
-      </nav>
+      {/* Sử dụng NavBar component */}
+      <NavBar />
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto pt-20 pb-16 px-4 text-center">
@@ -73,7 +59,7 @@ const Home = () => {
       </section>
 
       {/* Footer */}
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };

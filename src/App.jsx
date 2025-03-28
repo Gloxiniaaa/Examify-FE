@@ -9,7 +9,8 @@ import TeacherDashboard from "./pages/TeacherDashboard";
 import CreateTest from "./pages/CreateTest";
 import ViewResults from "./pages/ViewResults";
 import NotFoundPage from "./pages/404NotFoundPage";
-import React from "react";
+import PropTypes from "prop-types";
+
 import TeacherTestDetails from "./pages/TeacherTestDetails";
 
 // Authentication utility
@@ -24,6 +25,10 @@ const getUserRole = () => {
 
 // Protected Route Component
 const ProtectedRoute = ({ children, requiredRole = null }) => {
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+  requiredRole: PropTypes.string,
+};
   const isAuthenticated = isTokenValid();
   const userRole = getUserRole();
 
@@ -52,7 +57,7 @@ function App() {
             <StudentDashboard />
           </ProtectedRoute>
         } />
-
+         
         {/* Teacher Protected Routes */}
         <Route path="/teacher" element={
           <ProtectedRoute requiredRole="TEACHER">
