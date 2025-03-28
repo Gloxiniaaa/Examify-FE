@@ -27,7 +27,7 @@ const StudentDashboard = () => {
     setError("");
 
     try {
-      const response = await fetch(`/api/students/tests?passcode=${passcode}`, {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/students/tests?passcode=${passcode}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
