@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPastTestResults, selectStudentTests } from "../store/studentTestSlice"; // Adjust path as needed
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-
 const StudentDashboard = () => {
   const [passcode, setPasscode] = useState("");
   const [error, setError] = useState("");

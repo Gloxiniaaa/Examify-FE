@@ -14,6 +14,8 @@ import PropTypes from "prop-types";
 import TeacherTestDetails from "./pages/TeacherTestDetails";
 import StudentTest from "./pages/StudentTest";
 import NotFoundPage from "./pages/404NotFoundPage";
+import StudentTakeTest from "./pages/StudentTakeTest";
+
 
 // Authentication utility
 const isTokenValid = () => {
@@ -66,7 +68,11 @@ function App() {
             <StudentTest />
           </ProtectedRoute>
         } />
-         
+        <Route path="/student/taketest/:passcode" element={
+          <ProtectedRoute requiredRole="STUDENT">
+            <StudentTakeTest />
+          </ProtectedRoute>
+        } />
         {/* Teacher Protected Routes */}
         <Route path="/teacher" element={
           <ProtectedRoute requiredRole="TEACHER">

@@ -6,12 +6,14 @@ import Footer from "../components/Footer";
 const StudentTest = () => {
   const { state } = useLocation(); // Get test info passed from StudentDashboard
   const navigate = useNavigate();
+  const studentId = localStorage.getItem("userId");
   const testInfo = state?.testInfo;
-
   const handleStartTest = () => {
     if (testInfo) {
       // Navigate to the actual test-taking page (adjust path as needed)
-      navigate(`/test/${testInfo.passcode}/taketest`);
+      navigate(`/student/taketest/${testInfo.passcode}`, {
+        state: { testInfo1: testInfo },
+      });
     }
   };
 
