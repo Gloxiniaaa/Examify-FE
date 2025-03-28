@@ -1,6 +1,7 @@
 // Signup.jsx
 import { useState } from "react";
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -22,9 +23,12 @@ const Signup = () => {
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow-md p-4">
+      <header className="py-4 px-6 bg-white shadow-sm">
+        {/* <h1 className="text-2xl font-bold text-primary">Examify</h1> */}
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold text-primary">Examify</h1>
+          <Link to="/" className="text-2xl font-bold text-primary">
+            Examify
+          </Link>
         </div>
       </header>
 

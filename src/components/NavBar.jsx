@@ -24,6 +24,7 @@ const NavBar = () => {
   // Hình ảnh và liên kết profile dựa trên vai trò
   const profileImage = userRole === "TEACHER" ? profileTeacher : profileStudent;
   const profileLink = userRole === "TEACHER" ? "/teacher/profile" : "/student/profile";
+  const homeLink = userRole === "TEACHER" ? "/teacher" : userRole === "STUDENT" ? "/student" : "/";
 
   return (
     <nav className="bg-white shadow-md p-4">
@@ -35,7 +36,7 @@ const NavBar = () => {
             alt="Logo"
             className="w-10 h-10 mr-2 rounded-full" // Kích thước và khoảng cách
           />
-          <Link to="/home" className="text-2xl font-bold text-primary">
+          <Link to={homeLink} className="text-2xl font-bold text-primary">
             Examify
           </Link>
         </div>

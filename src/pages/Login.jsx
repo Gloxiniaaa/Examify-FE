@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import Footer from "../components/Footer";
@@ -80,7 +80,12 @@ function Login() {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="py-4 px-6 bg-white shadow-sm">
-        <h1 className="text-2xl font-bold text-primary">Examify</h1>
+        {/* <h1 className="text-2xl font-bold text-primary">Examify</h1> */}
+        <div className="max-w-7xl mx-auto">
+          <Link to="/" className="text-2xl font-bold text-primary">
+            Examify
+          </Link>
+        </div>
       </header>
       
       <main className="flex-1 flex items-center justify-center p-6">
