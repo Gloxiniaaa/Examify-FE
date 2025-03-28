@@ -15,6 +15,7 @@ import TeacherTestDetails from "./pages/TeacherTestDetails";
 import StudentTest from "./pages/StudentTest";
 import NotFoundPage from "./pages/404NotFoundPage";
 import StudentTakeTest from "./pages/StudentTakeTest";
+import ViewSubmission from "./pages/ViewSubmission";
 
 
 // Authentication utility
@@ -92,6 +93,11 @@ function App() {
         <Route path="/teacher/testdetails/:testId" element={
           <ProtectedRoute requiredRole="TEACHER">
             <TeacherTestDetails></TeacherTestDetails>
+          </ProtectedRoute>
+        } />
+        <Route path="/tests/:testId/students/:studentId/results" element={
+          <ProtectedRoute requiredRole="TEACHER">
+            <ViewSubmission></ViewSubmission>
           </ProtectedRoute>
         } />
 

@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTestResults, selectTeacherTests } from "../store/teacherTestSlice"; // Adjust path as needed
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar";
 
 const ViewResults = () => {
   const { testId, title } = useParams();
@@ -16,8 +16,8 @@ const ViewResults = () => {
     dispatch(fetchTestResults(testId));
   }, [dispatch, testId]);
 
-    const handleViewDetails = (testId) => {
-    // Navigate to result details page
+    const handleViewDetails = (testId, studentId) => {
+      navigate(`/tests/${testId}/students/${studentId}/results`);
   };
 
 
@@ -69,7 +69,7 @@ const ViewResults = () => {
                   </td>
                   <td className="p-4">
                         <button
-                          onClick={() => handleViewDetails(test.testid)}
+                          onClick={() => handleViewDetails(testId, result.studentID)}
                           className="text-primary hover:underline"
                         >
                           View Details
