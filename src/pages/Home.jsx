@@ -1,7 +1,10 @@
+import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar"; // Thêm NavBar
 
 const Home = () => {
+  const userRole = localStorage.getItem("userRole");
+  const fowardPageLink = userRole === "TEACHER" ? "/teacher" : "/student";
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Sử dụng NavBar component */}
@@ -18,11 +21,13 @@ const Home = () => {
         </p>
         <div className="space-x-4">
           <button className="bg-primary text-white px-6 py-3 rounded-md hover:bg-secondary transition">
-            Get Started as Teacher
+            <Link to={fowardPageLink}>
+            Get Started
+            </Link>
           </button>
-          <button className="border border-primary text-primary px-6 py-3 rounded-md hover:bg-accent transition">
+          {/* <button className="border border-primary text-primary px-6 py-3 rounded-md hover:bg-accent transition">
             Join as Student
-          </button>
+          </button> */}
         </div>
       </section>
 
