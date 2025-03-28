@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Thêm Link
 import profileTeacher from "../assets/rock.jpg";
@@ -7,6 +8,13 @@ const NavBar = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const userRole = localStorage.getItem("userRole"); // Lấy vai trò từ localStorage
+=======
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+const NavBar = () => {
+  const navigate = useNavigate();
+  const userRole = localStorage.getItem("userRole");
+>>>>>>> ef8459dfabb590d03289389eaf82a6b1d5d34cd2
 
   // Hàm xử lý đăng xuất
   const handleLogout = () => {
@@ -15,6 +23,7 @@ const NavBar = () => {
     localStorage.removeItem("userId");
     navigate("/login");
   };
+<<<<<<< HEAD
 
   // Hàm toggle dropdown menu
   const toggleDropdown = () => {
@@ -72,6 +81,18 @@ const NavBar = () => {
             </div>
           )}
         </div>
+=======
+  const homeLink = userRole === "TEACHER" ? "/teacher" : userRole === "STUDENT" ? "/student" : "/";
+  return (
+    <nav className="bg-white shadow-md p-4">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+      <Link to={homeLink} className="text-2xl font-bold text-primary">
+          Examify
+        </Link>
+        <button onClick={handleLogout} className="text-neutral-600 hover:text-primary">
+          Logout
+        </button>
+>>>>>>> ef8459dfabb590d03289389eaf82a6b1d5d34cd2
       </div>
     </nav>
   );
