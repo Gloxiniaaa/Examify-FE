@@ -80,15 +80,19 @@ export const fetchTestDetails = createAsyncThunk(
 );
 
 export const updateTest = createAsyncThunk(
-  'tests/updateTest',
-  async ({ testId, testData }, { rejectWithValue }) => {
+  "tests/updateTest",
+  async (testData, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/tests/${testId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(testData),
-      });
-      if (!response.ok) throw new Error('Failed to update test');
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_BE_API_URL}/tests`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(testData),
+        }
+      );
+      console.log(JSON.stringify(testData));
+      if (!response.ok) throw new Error("Failed to update test");
       return await response.json();
     } catch (error) {
       return rejectWithValue(error.message);
@@ -96,10 +100,9 @@ export const updateTest = createAsyncThunk(
   }
 );
 
-
 // Create the slice
 const teacherTestSlice = createSlice({
-  name: 'tests',
+  name: "tests",
   initialState: {
     tests: [],
     currentTest: null,
@@ -142,15 +145,11 @@ const teacherTestSlice = createSlice({
       })
       .addCase(updateTest.fulfilled, (state, action) => {
         state.loading = false;
-        state.currentTest = action.payload;
-        state.tests = state.tests.map((test) =>
-          test.id === action.payload.id ? action.payload : test
-        );
       })
       .addCase(updateTest.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
+      });
   },
 });
 

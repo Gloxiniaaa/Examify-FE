@@ -65,7 +65,29 @@ const TestDetails = () => {
 
   const handleSave = async () => {
     try {
-      await dispatch(updateTest({ testId, testData: editedTest })).unwrap();
+      const testToSave = {
+        title: editedTest.title,
+        id: editedTest.id,
+        description: editedTest.description,
+        testTime: Number(editedTest.testtime || editedTest.testTime), // Use testtime from UI, ensure number
+        timeOpen: new Date(editedTest.timeopen || editedTest.timeOpen).toISOString(), // Convert to ISO 8601
+        timeClose: new Date(editedTest.timeclose || editedTest.timeClose).toISOString(), // Convert to ISO 8601
+        passcode: editedTest.passcode,
+        teacherId: Number(editedTest.teacherid || editedTest.teacherId), // Ensure number
+        numberOfQuestion: editedTest.questions.length, // Auto-calculate
+        questions: editedTest.questions.map((q) => ({
+          id: q.id,
+          content: q.content,
+          score: Number(q.score), // Ensure number
+          answers: q.answers.map((a) => ({
+            id: a.id,
+            content: a.content,
+            isCorrect: a.iscorrect, // Already a boolean
+          })),
+        })),
+      };
+      console.log(testToSave);
+      await dispatch(updateTest(testToSave)).unwrap();
       setIsEditing(false);
     } catch (err) {
       alert("Failed to save changes: " + err);
