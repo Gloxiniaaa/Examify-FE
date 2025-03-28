@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Thêm Link
 import profileTeacher from "../assets/rock.jpg";
 import profileStudent from "../assets/v.jpg";
-
+import logoImage from "../assets/logoxx.png";
 const NavBar = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -27,11 +27,18 @@ const NavBar = () => {
 
   return (
     <nav className="bg-white shadow-md p-4">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Điều hướng đến trang chủ khi nhấn "Examify" */}
-        <Link to="/home" className="text-2xl font-bold text-primary">
-          Examify
-        </Link>
+     <div className="max-w-7xl mx-auto flex justify-between items-center">
+        {/* Điều hướng đến trang chủ khi nhấn "Examify" với ảnh bên trái */}
+        <div className="flex items-center">
+          <img
+            src={logoImage} // Đường dẫn đến ảnh logo
+            alt="Logo"
+            className="w-10 h-10 mr-2 rounded-full" // Kích thước và khoảng cách
+          />
+          <Link to="/home" className="text-2xl font-bold text-primary">
+            Examify
+          </Link>
+        </div>
         <div className="flex items-center">
           {userRole ? (
             <div className="relative">
