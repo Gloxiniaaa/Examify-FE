@@ -35,9 +35,17 @@ const Signup = () => {
       {/* Signup Form */}
       <main className="flex-grow flex items-center justify-center py-12">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-          <h2 className="text-3xl font-bold text-neutral-800 mb-6 text-center">
-            Sign Up
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <Link to="/" className="text-primary hover:text-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+            </Link>
+            <h2 className="text-3xl font-bold text-neutral-800 text-center flex-grow">
+              Sign Up
+            </h2>
+            <div className="w-6"></div> {/* Empty div for balanced spacing */}
+          </div>
           <form onSubmit={handleSignup}>
             <div className="mb-4">
               <label
