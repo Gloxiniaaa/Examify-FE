@@ -8,7 +8,7 @@ import Signup from "./pages/Singup";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import CreateTest from "./pages/CreateTest";
 import ViewResults from "./pages/ViewResults";
-import NotFoundPage from "./pages/404NotFoundPage";
+
 import PropTypes from "prop-types";
 
 import TeacherTestDetails from "./pages/TeacherTestDetails";
