@@ -3,6 +3,7 @@ import authenticationReducer from "./authSlice";
 import teacherTestReducer from "./teacherTestSlice";
 import studentTestReducer from "./studentTestSlice";
 import submissionReducer from "./submissionSlice";
+import userReducer from "./userSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     teacherTests: teacherTestReducer,
     studentTests: studentTestReducer,
     submissions: submissionReducer,
+    user: userReducer,
   },
 });
 

@@ -21,6 +21,7 @@ import StudentTest from "./pages/StudentTest";
 import NotFoundPage from "./pages/404NotFoundPage";
 import StudentTakeTest from "./pages/StudentTakeTest";
 import ViewSubmission from "./pages/ViewSubmission";
+import UserProfile from "./pages/UserProfile";
 
 // Authentication utility
 const isTokenValid = () => {
@@ -60,6 +61,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/notfound" element={<NotFoundPage></NotFoundPage>} />
+        <Route path="/profile" element={<UserProfile></UserProfile>} />
+
 
         {/* Student Protected Routes */}
         <Route

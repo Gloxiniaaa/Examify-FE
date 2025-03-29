@@ -23,12 +23,12 @@ const NavBar = () => {
 
   // Hình ảnh và liên kết profile dựa trên vai trò
   const profileImage = userRole === "TEACHER" ? profileTeacher : profileStudent;
-  const profileLink = userRole === "TEACHER" ? "/teacher/profile" : "/student/profile";
+  const profileLink = "/profile";
   const homeLink = "/";
 
   return (
     <nav className="bg-white shadow-md p-4">
-     <div className="max-w-7xl mx-auto flex justify-between items-center">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Điều hướng đến trang chủ khi nhấn "Examify" với ảnh bên trái */}
         <div className="flex items-center">
           <img
@@ -55,7 +55,8 @@ const NavBar = () => {
                     href={profileLink}
                     className="block px-4 py-2 text-neutral-600 hover:bg-gray-100"
                   >
-                    Thông tin {userRole === "TEACHER" ? "giáo viên" : "sinh viên"}
+                    Thông tin{" "}
+                    {userRole === "TEACHER" ? "giáo viên" : "sinh viên"}
                   </a>
                   <button
                     onClick={handleLogout}
