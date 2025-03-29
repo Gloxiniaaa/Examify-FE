@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPastTestResults, selectStudentTests } from "../store/studentTestSlice"; // Adjust path as needed
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar";
 
 const StudentDashboard = () => {
   const [passcode, setPasscode] = useState("");
@@ -34,11 +34,11 @@ const StudentDashboard = () => {
       });
 
       const result = await response.json();
-
+      const a = result.data.testtime ;
       if (response.ok && result.status === "OK") {
         // Navigate to StudentTest page with test data
         navigate(`/student/test/${passcode}`, {
-          state: { testInfo: result.data },
+          state: { testInfo: result.data, a},
         });
       } else {
         setError(result.message || "Invalid passcode. Please try again.");
@@ -138,7 +138,7 @@ const StudentDashboard = () => {
                       </td>
                       <td className="p-4">
                         <button
-                          onClick={() => handleViewDetails(test.testid)}
+                          onClick={() => handleViewDetails(result.testid)}
                           className="text-primary hover:underline"
                         >
                           View Details

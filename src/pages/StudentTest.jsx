@@ -1,25 +1,55 @@
-// StudentTest.jsx
 import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
 const StudentTest = () => {
-  const { state } = useLocation(); // Get test info passed from StudentDashboard
+  const { state } = useLocation(); // Lấy thông tin bài kiểm tra từ StudentDashboard
   const navigate = useNavigate();
   const testInfo = state?.testInfo;
 
-  const handleStartTest = () => {
+  const testTime = state?.a;
+  const handleStartTest = async () => {
     if (testInfo) {
-      // Navigate to the actual test-taking page (adjust path as needed)
-      navigate(`/test/${testInfo.passcode}/taketest`);
+      const studentId = parseInt(localStorage.getItem("userId"), 10);
+      const startTime = new Date(); // Lấy thời gian bắt đầu
+        const endTime = new Date(startTime.getTime() + testTime * 60000); // Cộng thêm testTime (60 * 1000ms)
+
+        // Định dạng lại thành chuỗi ISO
+        const startTimeISO = startTime.toISOString();
+        const endTimeISO = endTime.toISOString();
+  
+      // Kiểm tra xem testId có tồn tại không
+      if (!testInfo.id) {
+        console.error("testId is missing in testInfo");
+        return;
+      }
+  
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_REACT_APP_BE_API_URL}/tests/${studentId}/results`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ studentId, testId: testInfo.id  , startTimeISO}), // Sửa testInfo.testid thành testInfo.id
+          }
+        );
+  
+        if (!response.ok) {
+          throw new Error("Không thể bắt đầu bài kiểm tra.");
+        }
+        console.log(testInfo.id);
+        navigate(`/student/test/${testInfo.id}/taketest`, { state: { testId: testInfo.id , startTimeISO, endTimeISO} }); // Sửa tương tự ở đây
+      } catch (error) {
+        console.error("Lỗi khi gửi yêu cầu bắt đầu bài kiểm tra:", error);
+      }
     }
   };
-
-  // If no test info is passed, redirect back to dashboard or show error
+  // Nếu không có thông tin bài kiểm tra, hiển thị lỗi
   if (!testInfo) {
     return (
       <div className="min-h-screen bg-neutral-50">
-        <NavBar  />
+        <NavBar />
         <main className="max-w-7xl mx-auto px-4 py-8">
           <p className="text-red-500">No test information available. Please enter a valid passcode.</p>
         </main>
@@ -32,11 +62,8 @@ const StudentTest = () => {
     <div className="min-h-screen bg-neutral-50">
       <NavBar isAuthenticated={true} userRole="student" onLogout={() => console.log("Logging out...")} />
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Test Information Section */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-neutral-800 mb-6">
-            Test Information
-          </h2>
+          <h2 className="text-3xl font-bold text-neutral-800 mb-6">Test Information</h2>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
