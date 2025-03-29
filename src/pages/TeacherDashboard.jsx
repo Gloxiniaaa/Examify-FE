@@ -1,5 +1,5 @@
 // TeacherDashboard.jsx
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,11 +8,13 @@ import {
 } from "../store/teacherTestSlice";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import { Search } from "lucide-react";
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { tests, loading, error } = useSelector(selectTeacherTests);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const teacherId = localStorage.getItem("userId");
@@ -26,9 +28,22 @@ const TeacherDashboard = () => {
   const handleViewResults = (testId) => {
     navigate(`/teacher/results/${testId}`);
   };
+
   const handleViewDetails = (testId) => {
     navigate(`/teacher/testdetails/${testId}`);
   };
+
+  // Filter tests based on search query
+  const filteredTests =
+    searchQuery.trim() === ""
+      ? tests
+      : tests.filter((test) => {
+          const query = searchQuery.toLowerCase();
+          return (
+            test.title.toLowerCase().includes(query) ||
+            test.passcode.toLowerCase().includes(query)
+          );
+        });
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -40,7 +55,7 @@ const TeacherDashboard = () => {
         {/* Welcome Section */}
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-neutral-800 mb-4">
-            Welcome, Teacher 
+            Welcome, Teacher
           </h2>
           <p className="text-neutral-600">
             Manage your tests and view student results
@@ -60,15 +75,37 @@ const TeacherDashboard = () => {
         </section>
 
         <section>
-          <h3 className="text-2xl font-semibold text-neutral-800 mb-6">
-            Your Tests
-          </h3>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-semibold text-neutral-800">
+              Your Tests
+            </h3>
+
+            {/* Search bar for filtering tests */}
+            <div className="relative w-1/3">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by title or passcode..."
+                className="w-full px-3 py-2 pl-10 border border-neutral-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <Search
+                size={18}
+                className="text-neutral-500 absolute left-3 top-1/2 transform -translate-y-1/2"
+              />
+            </div>
+          </div>
+
           {loading ? (
             <p className="text-neutral-600">Loading tests...</p>
           ) : error ? (
             <p className="text-red-500">Error: {error}</p>
           ) : tests.length === 0 ? (
             <p className="text-neutral-600">No tests found.</p>
+          ) : filteredTests.length === 0 ? (
+            <p className="text-neutral-600 bg-white p-4 rounded-lg shadow-md text-center">
+              No tests match your search criteria.
+            </p>
           ) : (
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <table className="w-full">
@@ -78,13 +115,15 @@ const TeacherDashboard = () => {
                     <th className="text-left p-4 text-neutral-800">Passcode</th>
                     <th className="text-left p-4 text-neutral-800">Duration</th>
                     <th className="text-left p-4 text-neutral-800">Time Open</th>
-                    <th className="text-left p-4 text-neutral-800">Time Close</th>
+                    <th className="text-left p-4 text-neutral-800">
+                      Time Close
+                    </th>
                     <th className="text-left p-4 text-neutral-800">Details</th>
                     <th className="text-left p-4 text-neutral-800">Student</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {tests.map((test) => (
+                  {filteredTests.map((test) => (
                     <tr
                       key={test.id}
                       className="border-t border-neutral-600 hover:bg-accent"
