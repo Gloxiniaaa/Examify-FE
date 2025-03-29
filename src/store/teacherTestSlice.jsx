@@ -131,6 +131,31 @@ export const fetchTestResults = createAsyncThunk(
   }
 );
 
+export const deleteTest = createAsyncThunk(
+  "tests/deleteTest",
+  async (testId, { rejectWithValue }) => {
+    try {
+      const apiUrl = `${import.meta.env.VITE_REACT_APP_BE_API_URL}/tests?testId=${testId}`;
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete test");
+      }
+
+      const data = await response.json();
+      return { testId, message: data.message };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // Create the slice
 const teacherTestSlice = createSlice({
   name: "tests",
@@ -192,6 +217,21 @@ const teacherTestSlice = createSlice({
         state.allTestResults = action.payload;
       })
       .addCase(fetchTestResults.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Delete test
+      .addCase(deleteTest.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteTest.fulfilled, (state, action) => {
+        state.loading = false;
+        // Remove the deleted test from the tests array
+        state.tests = state.tests.filter(test => test.id !== action.payload.testId);
+        state.currentTest = null; // Clear current test if it was deleted
+      })
+      .addCase(deleteTest.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
