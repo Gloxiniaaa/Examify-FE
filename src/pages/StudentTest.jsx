@@ -133,12 +133,6 @@ const StudentTest = () => {
             </div>
             <div className="mt-6 flex justify-between">
               <button
-                onClick={handleGoBack}
-                className="bg-neutral-500 text-white px-6 py-2 rounded-md hover:bg-neutral-600 transition"
-              >
-                Go Back
-              </button>
-              <button
                 onClick={handleStartTest}
                 className="bg-primary text-white px-6 py-3 rounded-md hover:bg-secondary transition"
               >
