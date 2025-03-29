@@ -24,7 +24,7 @@ const NavBar = () => {
   // Hình ảnh và liên kết profile dựa trên vai trò
   const profileImage = userRole === "TEACHER" ? profileTeacher : profileStudent;
   const profileLink = userRole === "TEACHER" ? "/teacher/profile" : "/student/profile";
-  const homeLink = userRole === "TEACHER" ? "/teacher" : userRole === "STUDENT" ? "/student" : "/";
+  const homeLink = "/";
 
   return (
     <nav className="bg-white shadow-md p-4">

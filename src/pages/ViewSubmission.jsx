@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSubmissionDetails, selectSubmissions } from "../store/submissionSlice"; // Adjust path as needed
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
+import { ArrowLeft, Check, X } from "lucide-react"; // Import icons
 
 const ViewSubmission = () => {
   const { testId, studentId } = useParams();
@@ -18,8 +19,11 @@ const ViewSubmission = () => {
   }, [dispatch, testId, studentId]);
 
   const handleLogout = () => {
-    console.log("Logging out...");
     navigate("/login");
+  };
+  
+  const handleGoBack = () => {
+    navigate(-1); // Navigate back to previous page
   };
 
   const toggleQuestion = (questionId) => {
@@ -80,16 +84,27 @@ const ViewSubmission = () => {
     <div className="min-h-screen bg-neutral-50">
       <Navbar isAuthenticated={true} userRole="teacher" onLogout={handleLogout} />
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Submission Summary */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-neutral-800 mb-6">
+        {/* Header with back button */}
+        <div className="flex items-center mb-6">
+          <button 
+            onClick={handleGoBack}
+            className="mr-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
+            title="Go back"
+          >
+            <ArrowLeft size={24} className="text-neutral-700" />
+          </button>
+          <h2 className="text-3xl font-bold text-neutral-800">
             Submission Details
           </h2>
+        </div>
+        
+        {/* Submission Summary */}
+        <section className="mb-12">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <p className="text-neutral-600">
-                  <strong>Title</strong> {title}
+                  <strong>Title:</strong> {title}
                 </p>
                 <p className="text-neutral-600">
                   <strong>Total Score:</strong> {result.totalscore.toFixed(2)}
@@ -140,11 +155,14 @@ const ViewSubmission = () => {
                         Question {question.id}: {question.content}
                       </h4>
                       <span
-                        className={`text-1xl ${
-                          question.iscorrect ? "text-green-600" : "text-red-600"
+                        className={`flex items-center justify-center w-6 h-6 rounded-full ${
+                          question.iscorrect ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
                         }`}
                       >
-                        {question.iscorrect ? "✅" : "❌"}
+                        {question.iscorrect ? 
+                          <Check size={16} /> : 
+                          <X size={16} />
+                        }
                       </span>
                     </div>
                     <span className="text-neutral-600">
@@ -160,15 +178,36 @@ const ViewSubmission = () => {
                         {question.answers.map((answer) => {
                           const isCorrect = answer.iscorrect;
                           const isSelected = answer.id === question.answerid;
+                          const isWrongSelection = isSelected && !isCorrect;
+                          
                           return (
                             <div
                               key={answer.id}
-                              className={`p-2 rounded-md ${
-                                isCorrect ? "bg-green-100 text-green-800" : "text-neutral-600"
+                              className={`p-3 rounded-md flex items-center justify-between ${
+                                isCorrect 
+                                  ? "bg-green-100 text-green-800 border-l-4 border-green-500" 
+                                  : isWrongSelection
+                                    ? "bg-red-100 text-red-800 border-l-4 border-red-500"
+                                    : "bg-gray-50 text-neutral-600"
                               }`}
                             >
-                              {answer.content}
-                              {isSelected && " (selected)"}
+                              <div className="flex-grow">
+                                {answer.content}
+                              </div>
+                              <div className="flex items-center ml-2">
+                                {isSelected && (
+                                  <span className="font-medium mr-2">(Selected)</span>
+                                )}
+                                {isCorrect ? (
+                                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-green-200">
+                                    <Check size={16} className="text-green-700" />
+                                  </span>
+                                ) : isWrongSelection && (
+                                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-red-200">
+                                    <X size={16} className="text-red-700" />
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           );
                         })}

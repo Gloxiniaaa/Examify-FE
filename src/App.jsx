@@ -122,9 +122,7 @@ function App() {
         <Route
           path="/tests/:testId/students/:studentId/results"
           element={
-            <ProtectedRoute requiredRole="STUDENT">
               <ViewSubmission/>
-            </ProtectedRoute>
           }
         />
 

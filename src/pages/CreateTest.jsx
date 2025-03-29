@@ -5,7 +5,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { createTest } from "../store/teacherTestSlice";
 import { toast } from "react-toastify";
-import { ArrowLeft } from "lucide-react"; // Import the arrow icon
+import { ArrowLeft, ArrowUp, ArrowDown } from "lucide-react"; // Import arrow icons
 
 const CreateTest = () => {
   const navigate = useNavigate();
@@ -98,6 +98,28 @@ const CreateTest = () => {
     setTestData((prev) => ({ ...prev, questions: updatedQuestions }));
   };
 
+  // Move a question up in the list
+  const moveQuestionUp = (index) => {
+    if (index > 0) {
+      const updatedQuestions = [...testData.questions];
+      const temp = updatedQuestions[index];
+      updatedQuestions[index] = updatedQuestions[index - 1];
+      updatedQuestions[index - 1] = temp;
+      setTestData((prev) => ({ ...prev, questions: updatedQuestions }));
+    }
+  };
+
+  // Move a question down in the list
+  const moveQuestionDown = (index) => {
+    if (index < testData.questions.length - 1) {
+      const updatedQuestions = [...testData.questions];
+      const temp = updatedQuestions[index];
+      updatedQuestions[index] = updatedQuestions[index + 1];
+      updatedQuestions[index + 1] = temp;
+      setTestData((prev) => ({ ...prev, questions: updatedQuestions }));
+    }
+  };
+
   // Submit the entire testData to the API
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -136,7 +158,6 @@ const CreateTest = () => {
 
     try {
       const result = await createTest(formattedTestData);
-      // console.log("Test created successfully:", result);
       toast.success("Test created successfully");
       navigate("/teacher");
     } catch (error) {
@@ -149,7 +170,7 @@ const CreateTest = () => {
       <NavBar></NavBar>
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center mb-6">
-          <button 
+          <button
             onClick={handleGoBack}
             className="mr-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
             title="Go back"
@@ -343,50 +364,80 @@ const CreateTest = () => {
                 Added Questions
               </h4>
               {testData.questions.map((q, index) => (
-                <div
-                  key={index}
-                  className="bg-accent p-4 rounded-md mb-4 flex justify-between items-start"
-                >
-                  <div>
-                    <p className="text-neutral-800 font-medium">
-                      {index + 1}. {q.text}
-                    </p>
-                    <ul className="list-disc pl-6 mt-2">
-                      {q.options.map((opt, i) => (
-                        <li
-                          key={i}
-                          className={
-                            opt.isCorrect
-                              ? "text-green-600"
-                              : "text-neutral-600"
-                          }
+                <div key={index} className="bg-accent p-4 rounded-md mb-4">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-grow">
+                      <p className="text-neutral-800 font-medium">
+                        {index + 1}. {q.text}
+                      </p>
+                      <ul className="list-disc pl-6 mt-2">
+                        {q.options.map((opt, i) => (
+                          <li
+                            key={i}
+                            className={
+                              opt.isCorrect
+                                ? "text-green-600"
+                                : "text-neutral-600"
+                            }
+                          >
+                            {opt.text} {opt.isCorrect && "(Correct)"}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="flex flex-col">
+                        <button
+                          type="button"
+                          onClick={() => moveQuestionUp(index)}
+                          disabled={index === 0}
+                          className={`p-1 rounded hover:bg-gray-100 ${
+                            index === 0
+                              ? "text-gray-300 cursor-not-allowed"
+                              : "text-blue-500"
+                          }`}
+                          title="Move Up"
                         >
-                          {opt.text} {opt.isCorrect && "(Correct)"}
-                        </li>
-                      ))}
-                    </ul>
+                          <ArrowUp size={16} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => moveQuestionDown(index)}
+                          disabled={index === testData.questions.length - 1}
+                          className={`p-1 rounded hover:bg-gray-100 ${
+                            index === testData.questions.length - 1
+                              ? "text-gray-300 cursor-not-allowed"
+                              : "text-blue-500"
+                          }`}
+                          title="Move Down"
+                        >
+                          <ArrowDown size={16} />
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeQuestion(index)}
+                        className="text-red-500 hover:text-red-700 font-medium ml-2"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => removeQuestion(index)}
-                    className="text-red-500 hover:text-red-700 font-medium"
-                  >
-                    Remove
-                  </button>
                 </div>
               ))}
             </div>
           )}
         </section>
-
-        <button
-          onClick={handleSubmit}
-          type="submit"
-          form="testForm"
-          className="bg-primary text-white px-6 py-3 rounded-md hover:bg-secondary transition"
-        >
-          Save Test
-        </button>
+        <div className="flex justify-end">
+          <button
+            onClick={handleSubmit}
+            type="submit"
+            form="testForm"
+            className="bg-primary text-white px-6 py-3 rounded-md hover:bg-secondary transition"
+          >
+            Save Test
+          </button>
+        </div>
       </main>
       <Footer></Footer>
     </div>

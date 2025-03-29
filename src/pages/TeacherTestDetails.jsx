@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchTestDetails,
@@ -8,10 +8,13 @@ import {
 } from "../store/teacherTestSlice";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import { ArrowLeft } from "lucide-react";
+import { toast } from "react-toastify";
 
 const TestDetails = () => {
   const { testId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { currentTest, loading, error } = useSelector(selectTeacherTests);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -28,6 +31,10 @@ const TestDetails = () => {
       setEditedTest(JSON.parse(JSON.stringify(currentTest)));
     }
   }, [currentTest]);
+
+  const handleGoBack = () => {
+    navigate(-1); // Navigate back to previous page
+  };
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -89,8 +96,9 @@ const TestDetails = () => {
       console.log(testToSave);
       await dispatch(updateTest(testToSave)).unwrap();
       setIsEditing(false);
+      toast.success("Test updated successfully");
     } catch (err) {
-      alert("Failed to save changes: " + err);
+      toast.error("Failed to save changes: " + err);
     }
   };
 
@@ -118,8 +126,16 @@ const TestDetails = () => {
     <div className="min-h-screen bg-neutral-50">
       <NavBar></NavBar>
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center mb-6">
+          <button 
+            onClick={handleGoBack}
+            className="mr-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
+            title="Go back"
+          >
+            <ArrowLeft size={24} className="text-neutral-700" />
+          </button>
           <h2 className="text-3xl font-bold text-neutral-800">Test Details</h2>
+          <div className="flex-grow"></div>
           <button
             onClick={handleEditToggle}
             className="bg-primary text-white px-6 py-2 rounded-md hover:bg-secondary transition"
@@ -262,7 +278,7 @@ const TestDetails = () => {
           <div className="flex justify-end">
             <button
               onClick={handleSave}
-              className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition"
+              className="bg-primary text-white px-6 py-3 rounded-md hover:bg-secondary transition"
             >
               Save Changes
             </button>
