@@ -132,6 +132,10 @@ const CreateTest = () => {
       alert("Please fill in all test details");
       return;
     }
+    if (parseInt(testData.testTime, 10) <= 0) {
+      toast.error("Test duration must be a positive number");
+      return;
+    }
     if (testData.questions.length === 0) {
       alert("Please add at least one question");
       return;

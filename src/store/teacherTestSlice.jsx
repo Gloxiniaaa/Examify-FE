@@ -81,21 +81,35 @@ export const fetchTestDetails = createAsyncThunk(
 
 export const updateTest = createAsyncThunk(
   "tests/updateTest",
-  async (testData, { rejectWithValue }) => {
+  async (testData, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_REACT_APP_BE_API_URL}/tests`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(testData),
         }
       );
-      console.log(JSON.stringify(testData));
-      if (!response.ok) throw new Error("Failed to update test");
-      return await response.json();
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Failed to update test: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      
+      if (result.status !== "OK") {
+        throw new Error(result.message || "Failed to update test");
+      }
+      
+      return {
+        ...result,
+        testId: testData.id // Ensure we have the testId for further operations
+      };
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || "Failed to update test");
     }
   }
 );
@@ -135,7 +149,7 @@ export const deleteTest = createAsyncThunk(
   "tests/deleteTest",
   async (testId, { rejectWithValue }) => {
     try {
-      const apiUrl = `${import.meta.env.VITE_REACT_APP_BE_API_URL}/tests?testId=${testId}`;
+      const apiUrl = `${import.meta.env.VITE_REACT_APP_BE_API_URL}/tests/${testId}`;
       const response = await fetch(apiUrl, {
         method: "DELETE",
         headers: {
@@ -145,12 +159,18 @@ export const deleteTest = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete test");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
       }
 
       const data = await response.json();
-      return { testId, message: data.message };
+      if (data.status !== "OK" && !data.success) {
+        throw new Error(data.message || "Failed to delete test");
+      }
+      
+      return { testId, message: data.message || "Test deleted successfully" };
     } catch (error) {
+      console.error("Error deleting test:", error);
       return rejectWithValue(error.message);
     }
   }
@@ -202,6 +222,18 @@ const teacherTestSlice = createSlice({
       })
       .addCase(updateTest.fulfilled, (state, action) => {
         state.loading = false;
+        // If we have data in the response, update the currentTest
+        if (action.payload && action.payload.data) {
+          state.currentTest = action.payload.data;
+        }
+        
+        // If this test is in our tests array, update it there too
+        if (state.tests.length > 0 && action.payload.testId) {
+          const index = state.tests.findIndex(t => t.id === action.payload.testId);
+          if (index !== -1 && action.payload.data) {
+            state.tests[index] = action.payload.data;
+          }
+        }
       })
       .addCase(updateTest.rejected, (state, action) => {
         state.loading = false;
