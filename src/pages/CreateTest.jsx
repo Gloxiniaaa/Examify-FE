@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { createTest } from "../store/teacherTestSlice";
 import { toast } from "react-toastify";
+import { ArrowLeft } from "lucide-react"; // Import the arrow icon
 
 const CreateTest = () => {
   const navigate = useNavigate();
@@ -27,6 +28,10 @@ const CreateTest = () => {
       { text: "", isCorrect: false },
     ],
   });
+
+  const handleGoBack = () => {
+    navigate(-1); // Go back to the previous page
+  };
 
   // Handle changes to test details
   const handleTestDetailsChange = (e) => {
@@ -143,9 +148,18 @@ const CreateTest = () => {
     <div className="min-h-screen bg-neutral-50">
       <NavBar></NavBar>
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <h2 className="text-3xl font-bold text-neutral-800 mb-6">
-          Create New Test
-        </h2>
+        <div className="flex items-center mb-6">
+          <button 
+            onClick={handleGoBack}
+            className="mr-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
+            title="Go back"
+          >
+            <ArrowLeft size={24} className="text-neutral-700" />
+          </button>
+          <h2 className="text-3xl font-bold text-neutral-800">
+            Create New Test
+          </h2>
+        </div>
 
         {/* Test Details Form */}
         <form

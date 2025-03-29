@@ -40,7 +40,7 @@ const TeacherDashboard = () => {
         {/* Welcome Section */}
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-neutral-800 mb-4">
-            Welcome, [Teacher Name]
+            Welcome, Teacher 
           </h2>
           <p className="text-neutral-600">
             Manage your tests and view student results
