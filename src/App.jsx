@@ -13,7 +13,7 @@ import Signup from "./pages/Singup";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import CreateTest from "./pages/CreateTest";
 import ViewResults from "./pages/ViewResults";
-
+import ResultPage from "./pages/Resultpage";
 import PropTypes from "prop-types";
 
 import TeacherTestDetails from "./pages/TeacherTestDetails";
@@ -22,6 +22,8 @@ import NotFoundPage from "./pages/404NotFoundPage";
 import StudentTakeTest from "./pages/StudentTakeTest";
 import ViewSubmission from "./pages/ViewSubmission";
 import UserProfile from "./pages/UserProfile";
+import TestFinal from "./pages/StudentTestFinal";
+
 
 // Authentication utility
 const isTokenValid = () => {
@@ -86,6 +88,22 @@ function App() {
           element={
             <ProtectedRoute requiredRole="STUDENT">
               <StudentTakeTest />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/test/:testId/taketest"
+          element={
+            <ProtectedRoute requiredRole="STUDENT">
+                <TestFinal></TestFinal>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/results/:testId"
+          element={
+            <ProtectedRoute requiredRole="STUDENT">
+              <ResultPage />
             </ProtectedRoute>
           }
         />
