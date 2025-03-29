@@ -34,13 +34,13 @@ const StudentDashboard = () => {
 
       const result = await response.json();
 
-      if (response.ok && result.status === "OK") {
+      if (response.ok && result.status === "OK" && result.data) {
         // Navigate to StudentTest page with test data
         navigate(`/student/test/${passcode}`, {
           state: { testInfo: result.data },
         });
       } else {
-        setError(result.message || "Invalid passcode. Please try again.");
+        setError("There is no test matches the passcode.");
       }
     } catch (err) {
       setError("An error occurred while fetching test info. Please try again.");
