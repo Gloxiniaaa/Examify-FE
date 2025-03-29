@@ -323,7 +323,7 @@ const CreateTest = () => {
                       onChange={(e) =>
                         handleOptionChange(index, "isCorrect", e.target.checked)
                       }
-                      className="mr-2"
+                      className="mr-2 w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
                     />
                     Correct
                   </label>
