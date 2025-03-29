@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import Footer from "../components/Footer";
@@ -11,6 +11,35 @@ function Login() {
     password: ''
   });
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Check for OAuth redirect with token
+  useEffect(() => {
+    // Get token from URL parameters (if present)
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    
+    if (token) {
+      try {
+        // Decode and process the token
+        const decodedToken = jwtDecode(token);
+        
+        // Save authentication data
+        localStorage.setItem('token', token);
+        localStorage.setItem('userRole', decodedToken.role || 'STUDENT');
+        localStorage.setItem('userId', decodedToken.userId || decodedToken.sub);
+        
+        // Notify user
+        toast.success("Successfully logged in with Google");
+        
+        // Redirect to student page
+        navigate('/student');
+      } catch (error) {
+        console.error('Error processing OAuth token:', error);
+        toast.error("Failed to process authentication data");
+      }
+    }
+  }, [location, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
