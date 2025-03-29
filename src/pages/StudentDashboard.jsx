@@ -61,7 +61,7 @@ const StudentDashboard = () => {
         {/* Welcome Section */}
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-neutral-800 mb-4">
-            Welcome, [Student Name]
+            Welcome, Student 
           </h2>
           <p className="text-neutral-600">
             Enter a passcode to join a test or view your past results.
