@@ -23,7 +23,6 @@ export const addUser = async (userDTO) => {
             throw new Error(`Failed to add user. HTTP status: ${response.status}. ${data.message || ''}`);
         }
         
-        toast.success("Tạo tài khoản thành công");
         localStorage.removeItem('email');
         return { success: true };
     } catch (error) {

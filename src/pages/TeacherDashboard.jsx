@@ -35,8 +35,8 @@ const TeacherDashboard = () => {
 
   // Filter tests based on search query
   const filteredTests =
-    searchQuery.trim() === ""
-      ? tests
+    !tests || searchQuery.trim() === ""
+      ? tests || []
       : tests.filter((test) => {
           const query = searchQuery.toLowerCase();
           return (
@@ -100,9 +100,9 @@ const TeacherDashboard = () => {
             <p className="text-neutral-600">Loading tests...</p>
           ) : error ? (
             <p className="text-red-500">Error: {error}</p>
-          ) : tests.length === 0 ? (
+          ) : !tests || tests.length === 0 ? (
             <p className="text-neutral-600">No tests found.</p>
-          ) : filteredTests.length === 0 ? (
+          ) : !filteredTests || filteredTests.length === 0 ? (
             <p className="text-neutral-600 bg-white p-4 rounded-lg shadow-md text-center">
               No tests match your search criteria.
             </p>
