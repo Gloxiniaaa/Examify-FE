@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 
 const ResultPage = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -87,6 +88,14 @@ const ResultPage = () => {
                 </div>
               );
             })}
+          </div>
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => navigate('/student')}
+              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Trở về trang chủ
+            </button>
           </div>
         </>
       )}

@@ -61,6 +61,7 @@ const StudentTest = () => {
         console.log("Bài kiểm tra đã bắt đầu thành công.");
         navigate(`/student/test/${testInfo.id}/taketest`, {
           state: {
+            passcode: testInfo.passcode,
             testId: testInfo.id,
             startTime,
             endTimeISO,
