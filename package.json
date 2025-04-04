@@ -17,10 +17,13 @@
     "lucide-react": "^0.483.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.5.2",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.28.0",
+    "react-slick": "^0.30.3",
     "react-toastify": "^11.0.5",
     "redux": "^5.0.1",
+    "slick-carousel": "^1.8.1",
     "student-smart-printing-service-fe": "file:"
   },
   "devDependencies": {
