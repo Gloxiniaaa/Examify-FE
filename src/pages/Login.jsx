@@ -157,6 +157,12 @@ function Login() {
               </div>
             </div>
             
+            <div className="flex justify-end">
+              <Link to="/forgot-password" className="text-sm text-primary hover:text-primary-dark">
+                Quên mật khẩu?
+              </Link>
+            </div>
+            
             <button
               type="submit"
               className="w-full py-2 px-4 bg-primary text-white font-medium rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
