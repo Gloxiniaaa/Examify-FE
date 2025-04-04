@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
+import ImageCarousel from "../components/ImageCarousel";
 
 const Home = () => {
   const userRole = localStorage.getItem("userRole");
@@ -11,20 +12,12 @@ const Home = () => {
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-neutral-50 to-neutral-100">
       <NavBar />
 
-      {/* Hero Section */}
-      <section className="flex-grow flex flex-col items-center justify-center max-w-7xl mx-auto py-20 px-6 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold text-neutral-800 mb-6 leading-tight">
-          Create and Take Exams <span className="text-primary">Online</span> with Ease
-        </h1>
-        <p className="text-lg md:text-xl text-neutral-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-          Empowering teachers to create assessments and students to test their
-          knowledge through a simple, secure platform.
-        </p>
-        <div className="space-y-4 md:space-y-0 md:space-x-6">
-          <Link to={forwardPageLink} className="inline-block bg-primary text-white px-8 py-4 rounded-lg shadow-md hover:bg-secondary hover:shadow-lg transform hover:-translate-y-1 transition duration-300 text-lg font-medium">
-            Get Started
-          </Link>
-        </div>
+      {/* Hero Section with Carousel */}
+      <section className="relative">
+        <ImageCarousel 
+          buttonLink={forwardPageLink}
+          onButtonClick={() => window.location.href = forwardPageLink}
+        />
       </section>
 
       {/* Features Section */}
