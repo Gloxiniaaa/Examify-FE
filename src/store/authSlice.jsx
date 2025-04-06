@@ -111,6 +111,16 @@ export const updatePassword = createAsyncThunk(
     }
 );
 
+export const resendOTPEmail = createAsyncThunk(
+    'auth/resendOTPEmail',
+    async (email, { dispatch }) => {
+        // First delete the old OTP
+        await dispatch(deleteOTPByEmail(email));
+        // Then send new OTP
+        return dispatch(sendOTPEmail(email));
+    }
+);
+
 const authSlice = createSlice({
     name: 'authentication',
     initialState: {
@@ -124,7 +134,6 @@ const authSlice = createSlice({
             const email = action.payload;
             state.email = email;
             localStorage.setItem('email', email);
-            sendOTPByEmail(email);  
         },
         saveRegisterInfor: (state, action) => {
             state.studentDTO = action.payload;

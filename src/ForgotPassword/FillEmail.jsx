@@ -1,23 +1,14 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { sendOTPEmail } from '../store/authSlice';
 import Footer from "../components/Footer";
 
 const FillEmail = () => {
     const [email, setEmail] = useState('');
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await dispatch(sendOTPEmail(email)).unwrap();
-            localStorage.setItem('resetEmail', email);
-            navigate('/fill-otp');
-        } catch (error) {
-            console.error('Failed to send OTP:', error);
-        }
+        navigate(`/fill-otp?email=${encodeURIComponent(email)}`);
     };
 
     return (

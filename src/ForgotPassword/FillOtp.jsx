@@ -1,15 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import { getOTPByEmail, deleteOTPByEmail } from '../store/authSlice';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
+import { resendOTPEmail, getOTPByEmail, deleteOTPByEmail } from '../store/authSlice';
 import { toast } from 'react-toastify';
 import Footer from "../components/Footer";
 
 const FillOtp = () => {
     const [otp, setOtp] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [isVerifying, setIsVerifying] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const email = localStorage.getItem('resetEmail');
+    const [searchParams] = useSearchParams();
+    const email = searchParams.get('email');
+    const [hasSentOTP, setHasSentOTP] = useState(false);
+    const isMounted = useRef(true);
+    const hasInitialized = useRef(false);
+
+    useEffect(() => {
+        // Prevent double initialization
+        if (hasInitialized.current) return;
+        hasInitialized.current = true;
+
+        if (!email) {
+            toast.error('Email not found. Please start over.');
+            navigate('/fill-email');
+            return;
+        }
+
+        const sendOTP = async () => {
+            if (hasSentOTP || isLoading || !isMounted.current) return;
+
+            try {
+                setIsLoading(true);
+                await dispatch(resendOTPEmail(email)).unwrap();
+                if (isMounted.current) {
+                    setHasSentOTP(true);
+                }
+            } catch (error) {
+                if (isMounted.current) {
+                    console.error('Failed to send OTP:', error);
+                    navigate('/fill-email');
+                }
+            } finally {
+                if (isMounted.current) {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        sendOTP();
+
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);  // Empty dependency array since we use hasInitialized ref
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,16 +65,20 @@ const FillOtp = () => {
         }
 
         try {
+            setIsVerifying(true);
             const response = await dispatch(getOTPByEmail(email)).unwrap();
-            if (response.data === otp) {
+            console.log('OTP fetched:', response.data);
+            if (response.data.otp_code === otp) {
                 await dispatch(deleteOTPByEmail(email)).unwrap();
                 toast.success('OTP verified successfully');
-                navigate('/reset-password'); // Assuming you have this route
+                navigate(`/reset-password?email=${encodeURIComponent(email)}`);
             } else {
                 toast.error('Invalid OTP');
             }
         } catch (error) {
             console.error('OTP verification failed:', error);
+        } finally {
+            setIsVerifying(false);
         }
     };
 
@@ -70,9 +119,12 @@ const FillOtp = () => {
                         </div>
                         <button
                             type="submit"
-                            className="w-full py-2 px-4 bg-primary text-white font-medium rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                            disabled={isVerifying}
+                            className={`w-full py-2 px-4 ${
+                                isVerifying ? 'bg-gray-400' : 'bg-primary hover:bg-primary-dark'
+                            } text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2`}
                         >
-                            Verify OTP
+                            {isVerifying ? 'Verifying...' : 'Verify OTP'}
                         </button>
                     </form>
                 </div>

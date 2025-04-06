@@ -21,20 +21,20 @@ const FillNewPassword = () => {
             return;
         }
 
-        const email = localStorage.getItem('email');
-        if (!email) {
-            toast.error('No email found. Please start the password reset process again');
+        const username = localStorage.getItem('username');
+        if (!username) {
+            toast.error('No username found. Please start the password reset process again');
             navigate('/forgot-password');
             return;
         }
 
         const result = await dispatch(updatePassword({
-            username: email,
+            username: username,
             newPassword: formData.newPassword
         }));
 
         if (updatePassword.fulfilled.match(result)) {
-            localStorage.removeItem('email');
+            localStorage.removeItem('username');
             navigate('/login');
         }
     };
