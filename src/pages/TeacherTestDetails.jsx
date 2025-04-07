@@ -143,9 +143,7 @@ const TestDetails = () => {
           .map(q => q.id)
       };
 
-      const result = await dispatch(updateTest(testToSave)).unwrap();
-      console.log("Update result:", testToSave);
-      // After successful update, fetch the latest test data to ensure UI is in sync
+      await dispatch(updateTest(testToSave)).unwrap();
       await dispatch(fetchTestDetails(testId));
       
       setIsEditing(false);
@@ -162,12 +160,11 @@ const TestDetails = () => {
   const handleDeleteTest = async () => {
     setIsDeleting(true);
     try {
-      const result = await dispatch(deleteTest(testId)).unwrap();
+      await dispatch(deleteTest(testId)).unwrap();
       setShowDeleteModal(false);
       toast.success("Test deleted successfully");
       navigate("/teacher"); // Navigate back to the teacher dashboard
     } catch (err) {
-      console.error("Delete test error:", err);
       toast.error(`Failed to delete test: ${err.toString()}`);
       setShowDeleteModal(false); // Close the modal even on error
     } finally {

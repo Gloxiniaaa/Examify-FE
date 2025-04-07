@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
+
 const TestFinal = () => {
-  const { passcode } = useParams();
   const { state } = useLocation();
   const testId = state?.testId;
-  const startTimeISO = state?.startTimeISO;
+  const passcode = state?.passcode;
+  const startTime = state?.startTime;
   const endTimeISO = state?.endTimeISO;
+  const numberOfQuestion = state?.numberOfQuestion;
+
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -60,39 +63,41 @@ const TestFinal = () => {
     fetchQuestionsAndInitialize();
   }, [testId]);
 
-  // Tính toán thời gian đếm ngược
+  // Time calculation effect
   useEffect(() => {
-    if (!startTimeISO || !endTimeISO) return;
-    const startTime = new Date(startTimeISO);
-    const endTime = new Date(endTimeISO);
-    const now = new Date();
+    if (!startTime || !endTimeISO) return;
 
-    if (now >= endTime) {
-      handleSubmit();
-    } else {
-      const timeDiff = Math.floor((endTime - now) / 1000);
-      setTimeLeft(timeDiff);
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      const endTime = new Date(endTimeISO);
+      const diff = endTime - now;
 
-      const timer = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            handleSubmit();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+      if (diff <= 0) {
+        handleSubmit();
+        return 0;
+      }
+      return Math.floor(diff / 1000);
+    };
 
-      return () => clearInterval(timer);
-    }
-  }, [startTimeISO, endTimeISO]);
+    setTimeLeft(calculateTimeLeft());
+
+    const timer = setInterval(() => {
+      const newTimeLeft = calculateTimeLeft();
+      setTimeLeft(newTimeLeft);
+
+      if (newTimeLeft <= 0) {
+        clearInterval(timer);
+        handleSubmit(); // Tự động nộp bài khi hết giờ
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [startTime, endTimeISO, navigate]); // Thêm navigate vào dependencies
 
   // Gửi câu trả lời tự luận sau khi ngừng nhập (debounce 2 giây)
   useEffect(() => {
     const timer = setTimeout(async () => {
       const studentId = parseInt(localStorage.getItem("userId"), 10);
-      const numberOfQuestion= state?.numberOfQuestion;
       for (const [questionId, answer] of Object.entries(writtenAnswers)) {
         if (answer) {
           try {
@@ -127,26 +132,6 @@ const TestFinal = () => {
   };
 
   // Xử lý chọn đáp án trắc nghiệm và gửi ngay đến server
-  // const handleAnswerSelect = async (questionId, answerId) => {
-  //   const studentId = parseInt(localStorage.getItem("userId"), 10);
-  //   try {
-  //     const response = await fetch(
-  //       `${import.meta.env.VITE_REACT_APP_BE_API_URL}/students/${studentId}/answers`,
-  //       {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         credentials: "include",
-  //         body: JSON.stringify({ studentId,questionId }),
-  //       }
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error(`Không thể gửi câu trả lời, mã trạng thái: ${response.status}`);
-  //     }
-  //     console.log("Thành công, mã trạng thái:", response.status);
-  //   } catch (error) {
-  //     console.error("Lỗi:", error);
-  //   }
-  // };
   const handleAnswerSelect = async (questionId, answerId) => {
     setSelectedAnswers((prev) => ({ ...prev, [questionId]: answerId }));
   
@@ -168,6 +153,7 @@ const TestFinal = () => {
       setError("Đã xảy ra lỗi khi gửi câu trả lời.");
     }
   };
+
   // Xử lý nhập câu trả lời tự luận
   const handleWrittenAnswer = (questionId, answer) => {
     setWrittenAnswers((prev) => ({ ...prev, [questionId]: answer }));

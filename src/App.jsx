@@ -24,7 +24,9 @@ import ViewSubmission from "./pages/ViewSubmission";
 import UserProfile from "./pages/UserProfile";
 import TestFinal from "./pages/StudentTestFinal";
 
-
+import FillEmail from "./ForgotPassword/FillEmail";
+import FillOtp from "./ForgotPassword/FillOtp";
+import FillNewPassword from "./ForgotPassword/FillNewPassword";
 // Authentication utility
 const isTokenValid = () => {
   const token = localStorage.getItem("token");
@@ -64,8 +66,9 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/notfound" element={<NotFoundPage></NotFoundPage>} />
         <Route path="/profile" element={<UserProfile></UserProfile>} />
-
-
+        <Route path="/forgot-password" element={<FillEmail />} />
+        <Route path="/fill-otp" element={<FillOtp />} />
+        <Route path="/reset-password" element={<FillNewPassword />} />
         {/* Student Protected Routes */}
         <Route
           path="/student"
