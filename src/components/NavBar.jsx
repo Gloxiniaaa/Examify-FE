@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Thêm Link
-import profileTeacher from "../assets/rock.jpg";
-import profileStudent from "../assets/v.jpg";
+import profileTeacher from "../assets/userlogo.jpg";
+import profileStudent from "../assets/userlogo.jpg";
 import logoImage from "../assets/logoxx.png";
 const NavBar = () => {
   const navigate = useNavigate();
