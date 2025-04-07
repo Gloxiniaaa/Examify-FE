@@ -162,7 +162,7 @@ const CreateTest = () => {
 
     try {
       const result = await createTest(formattedTestData);
-      console.log("Test created:", result);
+      // console.log("Test created:", result);
       toast.success("Test created successfully");
       navigate("/teacher");
     } catch (error) {
