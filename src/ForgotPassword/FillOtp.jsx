@@ -67,7 +67,7 @@ const FillOtp = () => {
         try {
             setIsVerifying(true);
             const response = await dispatch(getOTPByEmail(email)).unwrap();
-            console.log('OTP fetched:', response.data);
+            // console.log('OTP fetched:', response.data);
             if (response.data.otp_code === otp) {
                 await dispatch(deleteOTPByEmail(email)).unwrap();
                 toast.success('OTP verified successfully');

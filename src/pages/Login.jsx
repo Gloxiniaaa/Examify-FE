@@ -40,11 +40,14 @@ function Login() {
 
   // Add useEffect to check for JWT token in cookies
   useEffect(() => {
-    const jwtToken = getCookie('jwt_transfer');
-    if (jwtToken) {
-      // Clear the cookie after getting the token
-      document.cookie = 'jwt_transfer=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-      handleUserAuth(jwtToken);
+    // Kiểm tra xem có token trong URL fragment không
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const token = hashParams.get('token');
+    
+    if (token) {
+      // Xóa token khỏi URL để tránh lộ thông tin nhạy cảm
+      window.history.replaceState({}, document.title, window.location.pathname);
+      handleUserAuth(token);
     }
   }, []);
 

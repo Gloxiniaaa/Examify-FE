@@ -8,7 +8,7 @@ const StudentTest = () => {
   const testInfo = state?.testInfo;
   //const testTime = state?.a;
   const handleStartTest = async () => {
-    console.log("testInfo", testInfo);
+    // console.log("testInfo", testInfo);
     if (testInfo) {
       const studentId = parseInt(localStorage.getItem("userId"), 10);
       const startTimea = new Date();

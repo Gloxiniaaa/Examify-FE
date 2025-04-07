@@ -4,7 +4,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const fetchPastTestResults = createAsyncThunk(
   "tests/fetchPastTestResults",
   async (studentId, { rejectWithValue }) => {
-    console.log(studentId);
     
     try {
       const apiUrl = `${import.meta.env.VITE_REACT_APP_BE_API_URL}/students/${studentId}/results`;
@@ -19,7 +18,7 @@ export const fetchPastTestResults = createAsyncThunk(
         throw new Error("Failed to fetch tests");
       }
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       
       return data.data; 
     } catch (error) {
