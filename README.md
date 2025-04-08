@@ -1,4 +1,4 @@
-# ExamWeb - Online Examination System
+# Examify - Online Examination System
 
 A modern web-based examination platform that enables teachers to create, manage tests and students to take exams online.
 
