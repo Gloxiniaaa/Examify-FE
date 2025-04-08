@@ -1,6 +1,8 @@
 # Examify - Online Examination System
 
 A modern web-based examination platform that enables teachers to create, manage tests and students to take exams online.
+![image](https://github.com/user-attachments/assets/da5bc4f2-5c39-4454-907d-f7b651dc0e5b)
+
 
 ## Features
 
